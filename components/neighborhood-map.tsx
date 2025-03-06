@@ -1,10 +1,9 @@
 "use client"
 
 import { useEffect, useState, Dispatch, SetStateAction } from "react"
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
+import dynamic from "next/dynamic"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import L from "leaflet"
+
 
 type Neighborhood = {
   neighborhood: string
@@ -27,15 +26,29 @@ type NeighborhoodMapProps = {
   destinationCity: string
 }
 
-const customIcon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const MapComponent = dynamic(() => import("./map-component"), {
+  ssr: false,
+  loading: () => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Loading Map...</CardTitle>
+        <CardDescription>The map will appear shortly</CardDescription>
+      </CardHeader>
+      <CardContent className="h-[400px] bg-muted/20 flex items-center justify-center">
+        <p>Map is loading...</p>
+      </CardContent>
+    </Card>
+  ),
 })
+// const customIcon = L.icon({
+//   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+//   iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+//   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+//   shadowSize: [41, 41],
+// })
 
 export default function NeighborhoodMap({ mappings, originCity, destinationCity }: NeighborhoodMapProps) {
   const [isMounted, setIsMounted] = useState<boolean>(false)
@@ -80,7 +93,7 @@ export default function NeighborhoodMap({ mappings, originCity, destinationCity 
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0 h-[400px]">
-        <MapContainer
+        {/* <MapContainer
           center={[centerLat, centerLng]}
           zoom={12}
           style={{ height: "100%", width: "100%", borderRadius: "0 0 0.5rem 0.5rem" }}
@@ -114,7 +127,8 @@ export default function NeighborhoodMap({ mappings, originCity, destinationCity 
               </Marker>
             )
           })}
-        </MapContainer>
+        </MapContainer> */}
+        <MapComponent center={[centerLat, centerLng]} zoom={12} mappings={mappings} />
       </CardContent>
     </Card>
   )
