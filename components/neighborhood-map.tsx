@@ -58,7 +58,6 @@ export default function NeighborhoodMap({ mappings, originCity, destinationCity 
     )
   }
 
-  // Get coordinates for the first destination to center the map
   const firstDestination = mappings[0]?.destination
   let centerLat, centerLng
 
@@ -68,7 +67,6 @@ export default function NeighborhoodMap({ mappings, originCity, destinationCity 
       centerLng = coords.longitude
     
   } else {
-    // Default coordinates if no mappings
     centerLat = 0
     centerLng = 0
   }
